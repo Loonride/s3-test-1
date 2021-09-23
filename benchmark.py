@@ -3,6 +3,7 @@ import timeit
 import secrets
 import json
 import os
+from statistics import mean
 from pathlib import Path
 from abc import ABC, abstractmethod
 import boto3
@@ -14,10 +15,11 @@ def generate_bytes(n):
 
 class Benchmark(ABC):
     def __init__(self):
-        self.n_tasks = 100
+        self.n_tasks = 1000
         self.task_size_bytes = None
         self.tasks = []
         self.data_filename = 'data.json'
+        self.name = 'data'
 
         file_dir = Path(__file__).parent.resolve()
         self.data_dir = os.path.join(file_dir, 'data')
@@ -26,7 +28,7 @@ class Benchmark(ABC):
     def init_tasks(self, task_size_bytes):
         self.task_size_bytes = task_size_bytes
         self.tasks = []
-        for i in range(self.n_tasks):
+        for _ in range(self.n_tasks):
             self.tasks.append(generate_bytes(task_size_bytes))
 
     def get_data_path(self):
@@ -50,10 +52,16 @@ class Benchmark(ABC):
         put_ts = self.put_times()
         get_ts = self.get_times()
         delete_ts = self.delete_times()
+
+        put_mean = mean(put_ts)
+        get_mean = mean(get_ts)
+        delete_mean = mean(delete_ts)
+        print("{:s} {:d} Bytes Means: PUT {:.3f}s, GET {:.3f}s, DELETE {:.3f}s".format(self.name, task_size_bytes, put_mean, get_mean, delete_mean))
+
         return (put_ts, get_ts, delete_ts)
 
     def time_sizes(self):
-        sizes = [1000] # , 10000, 100000, 1000000
+        sizes = [1000, 10000, 100000, 1000000]
         put_group = {}
         get_group = {}
         delete_group = {}
@@ -77,6 +85,7 @@ class S3Benchmark(Benchmark):
     def __init__(self):
         super().__init__()
         self.data_filename = 's3_data.json'
+        self.name = 'S3'
         self.s3 = boto3.resource('s3')
         self.objs = []
 
@@ -107,7 +116,11 @@ class S3Benchmark(Benchmark):
         return times
 
 
-# class RedisBenchmark():
+class RedisBenchmark(Benchmark):
+    def __init__(self):
+        super().__init__()
+        self.data_filename = 'redis_data.json'
+        self.name = 'Redis'
 
 
 if __name__ == '__main__':
