@@ -6,9 +6,11 @@ from generate_task import S3Task
 
 s3 = boto3.resource('s3')
 
+n_tasks = 1000
+
 tasks = []
 task_data_list = []
-for i in range(100):
+for i in range(n_tasks):
     task = S3Task()
     tasks.append(task)
     task_data_list.append(task.serialize())
@@ -26,7 +28,9 @@ for task_data in task_data_list:
 
 end = time.time()
 diff1 = end - start
-print(diff1)
+print(f"Total put time: {diff1}")
+time_per_task = diff1 / n_tasks
+print(f"Time per task: {time_per_task}")
 
 start = time.time()
 
@@ -36,4 +40,6 @@ for obj in objs:
 
 end = time.time()
 diff2 = end - start
-print(diff2)
+print(f"Total get and delete time: {diff2}")
+time_per_task = diff2 / n_tasks
+print(f"Time per task: {time_per_task}")
