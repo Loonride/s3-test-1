@@ -126,3 +126,4 @@ venv.bak/
 # emacs buffers
 \#*
 
+data/
