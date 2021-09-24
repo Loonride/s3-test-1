@@ -48,10 +48,6 @@ S3 100000000 Bytes Means: PUT 1.645s, GET 1.810s, DELETE 0.025s
 
 # Extra Notes
 
-Do tests and make plots for:
-2K Bytes, 20K Bytes, 200K Bytes, 2M Bytes
+Make whisker plots to check extreme cases
 
-(Whisker plots to see if there are extreme cases)
-
-It's costly to establish HTTPS connection every time,
-vs. Redis where you can create a single connection and use it the whole time
+It's costly to establish HTTPS connection every time, vs. Redis where you can create a single connection and use it the whole time
