@@ -152,7 +152,7 @@ class RedisBenchmark(Benchmark):
 
 
 if __name__ == '__main__':
-    # s3_bench = S3Benchmark()
-    # s3_bench.time_sizes()
+    s3_bench = S3Benchmark()
+    s3_bench.time_sizes()
     redis_bench = RedisBenchmark()
     redis_bench.time_sizes()
