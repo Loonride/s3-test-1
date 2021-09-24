@@ -6,4 +6,4 @@ print(f"Using redis host: {redis_host}")
 
 r = redis.Redis(redis_host, port=6379, db=0)
 r.set('foo', 'bar')
-r.get('foo')
+print(r.get('foo'))
