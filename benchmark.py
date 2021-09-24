@@ -8,6 +8,7 @@ from statistics import mean
 from pathlib import Path
 from abc import ABC, abstractmethod
 import boto3
+import redis
 
 
 def generate_bytes(n):
