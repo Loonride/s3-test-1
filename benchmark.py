@@ -35,22 +35,19 @@ class Benchmark(ABC):
         return data_path
 
     @abstractmethod
-    def put_times(self):
-        pass
-
-    @abstractmethod
-    def get_times(self):
-        pass
-
-    @abstractmethod
-    def delete_times(self):
+    def run_once(self):
         pass
 
     def time_size(self, task_size_bytes):
         self.task_size_bytes = task_size_bytes
-        put_ts = self.put_times()
-        get_ts = self.get_times()
-        delete_ts = self.delete_times()
+        put_ts = []
+        get_ts = []
+        delete_ts = []
+        for _ in range(self.n_tasks):
+            (put_t, get_t, delete_t) = self.run_once()
+            put_ts.append(put_t)
+            get_ts.append(get_t)
+            delete_ts.append(delete_t)
 
         put_mean = mean(put_ts)
         get_mean = mean(get_ts)
@@ -86,34 +83,15 @@ class S3Benchmark(Benchmark):
         self.data_filename = 's3_data.json'
         self.name = 'S3'
         self.s3 = boto3.resource('s3')
-        self.objs = []
 
-    def put_times(self):
-        self.objs = []
-        times = []
-        for _ in range(self.n_tasks):
-            task_id = str(uuid.uuid4())
-            obj = self.s3.Object('kir-test-bucket-1', task_id)
-            self.objs.append(obj)
-
-            b = generate_bytes(self.task_size_bytes)
-            t = timeit.timeit(lambda: obj.put(Body=b), number=1)
-            times.append(t)
-        return times
-
-    def get_times(self):
-        times = []
-        for obj in self.objs:
-            t = timeit.timeit(lambda: obj.get()['Body'].read(), number=1)
-            times.append(t)
-        return times
-
-    def delete_times(self):
-        times = []
-        for obj in self.objs:
-            t = timeit.timeit(lambda: obj.delete(), number=1)
-            times.append(t)
-        return times
+    def run_once(self):
+        task_id = str(uuid.uuid4())
+        obj = self.s3.Object('kir-test-bucket-1', task_id)
+        b = generate_bytes(self.task_size_bytes)
+        put_t = timeit.timeit(lambda: obj.put(Body=b), number=1)
+        get_t = timeit.timeit(lambda: obj.get()['Body'].read(), number=1)
+        delete_t = timeit.timeit(lambda: obj.delete(), number=1)
+        return (put_t, get_t, delete_t)
 
 
 class RedisBenchmark(Benchmark):
@@ -122,33 +100,14 @@ class RedisBenchmark(Benchmark):
         self.data_filename = 'redis_data.json'
         self.name = 'Redis'
         self.rc = redis.Redis(redis_host, port=6379, db=0)
-        self.task_ids = []
 
-    def put_times(self):
-        self.task_ids = []
-        times = []
-        for _ in range(self.n_tasks):
-            task_id = str(uuid.uuid4())
-            self.task_ids.append(task_id)
-
-            b = generate_bytes(self.task_size_bytes)
-            t = timeit.timeit(lambda: self.rc.set(task_id, b), number=1)
-            times.append(t)
-        return times
-
-    def get_times(self):
-        times = []
-        for task_id in self.task_ids:
-            t = timeit.timeit(lambda: self.rc.get(task_id), number=1)
-            times.append(t)
-        return times
-
-    def delete_times(self):
-        times = []
-        for task_id in self.task_ids:
-            t = timeit.timeit(lambda: self.rc.delete(task_id), number=1)
-            times.append(t)
-        return times
+    def run_once(self):
+        task_id = str(uuid.uuid4())
+        b = generate_bytes(self.task_size_bytes)
+        put_t = timeit.timeit(lambda: self.rc.set(task_id, b), number=1)
+        get_t = timeit.timeit(lambda: self.rc.get(task_id), number=1)
+        delete_t = timeit.timeit(lambda: self.rc.delete(task_id), number=1)
+        return (put_t, get_t, delete_t)
 
 
 if __name__ == '__main__':
