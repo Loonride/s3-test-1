@@ -20,7 +20,7 @@ def generate_bytes(n):
 
 class Benchmark(ABC):
     def __init__(self):
-        self.n_tasks = 100
+        self.n_tasks = 1000
         self.byte_test_sizes = [1000, 10000, 100000, 1000000, 10000000, 100000000]
         self.task_size_bytes = None
         self.data_filename = 'data.json'
@@ -52,7 +52,7 @@ class Benchmark(ABC):
         put_mean = mean(put_ts)
         get_mean = mean(get_ts)
         delete_mean = mean(delete_ts)
-        print("{:s} {:d} Bytes Means: PUT {:.3f}s, GET {:.3f}s, DELETE {:.3f}s".format(self.name, task_size_bytes, put_mean, get_mean, delete_mean))
+        print("{:s} {:d} Bytes Means: PUT {:.4f}s, GET {:.4f}s, DELETE {:.4f}s".format(self.name, task_size_bytes, put_mean, get_mean, delete_mean))
 
         return (put_ts, get_ts, delete_ts)
 
