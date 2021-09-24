@@ -20,7 +20,7 @@ def generate_bytes(n):
 
 class Benchmark(ABC):
     def __init__(self):
-        self.n_tasks = 1000
+        self.n_tasks = 100
         self.byte_test_sizes = [1000, 10000, 100000, 1000000, 10000000, 100000000]
         self.task_size_bytes = None
         self.data_filename = 'data.json'
