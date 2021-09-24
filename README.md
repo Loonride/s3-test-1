@@ -23,9 +23,13 @@ python3 benchmark.py
 python plot.py
 ```
 
-# Results
+# Results on EC2
 
-![alt text](https://raw.githubusercontent.com/Loonride/s3-test-1/main/figure1.png)
+- Using Redis cache.t3.medium, EC2 t2.small
+- 100 runs each
+- Redis/S3 always emptied before each PUT-GET-DELETE sequence
+
+![alt text](https://raw.githubusercontent.com/Loonride/s3-test-1/main/figures/figure1.png)
 
 ```
 Redis 1000 Bytes Means: PUT 0.001s, GET 0.001s, DELETE 0.001s

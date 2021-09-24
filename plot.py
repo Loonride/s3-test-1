@@ -18,23 +18,28 @@ data_files = [
 
 fig, axs = plt.subplots(2, 3)
 
-fig.suptitle("Time for PUT/GET/DELETE in seconds, Sizes in 1000 Bytes, 100 runs each")
+fig.suptitle("Time for PUT/GET/DELETE in seconds, Sizes in MB, 100 runs each")
 
 axs = np.ndarray.flatten(axs)
 
-i = 0
+ax_index = 0
 for data_file_info in data_files:
     title = data_file_info["title"]
     with open(data_file_info["file"]) as fp:
         data = json.load(fp)
 
     for key in data.keys():
-        ax = axs[i]
-        i += 1
+        ax = axs[ax_index]
+        ax_index += 1
         pts = data[key]["data"]
         labels = data[key]["labels"]
-        labels = list(map(lambda l: l[:-3], labels))
+        final_labels = []
+        for label in labels:
+            b = int(label)
+            mb = b / 1000000
+            final_labels.append(str(mb))
+
         ax.set_title(f"{title}, {key.upper()}")
-        ax.boxplot(pts, labels=labels)
+        ax.boxplot(pts, labels=final_labels)
 
 plt.show()
