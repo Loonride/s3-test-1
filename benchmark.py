@@ -11,13 +11,17 @@ import boto3
 import redis
 
 
+redis_host = os.environ.get('REDIS_HOST')
+
+
 def generate_bytes(n):
     return secrets.token_bytes(n)
 
 
 class Benchmark(ABC):
     def __init__(self):
-        self.n_tasks = 1000
+        self.n_tasks = 100
+        self.byte_test_sizes = [1000] # [1000, 10000, 100000, 1000000]
         self.task_size_bytes = None
         self.data_filename = 'data.json'
         self.name = 'data'
@@ -56,7 +60,7 @@ class Benchmark(ABC):
         return (put_ts, get_ts, delete_ts)
 
     def time_sizes(self):
-        sizes = [1000 , 10000, 100000, 1000000]
+        sizes = self.byte_test_sizes
         put_group = {}
         get_group = {}
         delete_group = {}
@@ -117,9 +121,38 @@ class RedisBenchmark(Benchmark):
         super().__init__()
         self.data_filename = 'redis_data.json'
         self.name = 'Redis'
+        self.rc = redis.Redis(redis_host, port=6379, db=0)
+        self.task_ids = []
+
+    def put_times(self):
+        self.task_ids = []
+        times = []
+        for _ in range(self.n_tasks):
+            task_id = str(uuid.uuid4())
+            self.task_ids.append(task_id)
+
+            b = generate_bytes(self.task_size_bytes)
+            t = timeit.timeit(lambda: self.rc.set(task_id, b), number=1)
+            times.append(t)
+        return times
+
+    def get_times(self):
+        times = []
+        for task_id in self.task_ids:
+            t = timeit.timeit(lambda: self.rc.get(task_id), number=1)
+            times.append(t)
+        return times
+
+    def delete_times(self):
+        times = []
+        for task_id in self.task_ids:
+            t = timeit.timeit(lambda: self.rc.delete(task_id), number=1)
+            times.append(t)
+        return times
 
 
 if __name__ == '__main__':
-    s3_bench = S3Benchmark()
-    s3_bench.time_sizes()
-    # redis_bench = RedisBenchmark()
+    # s3_bench = S3Benchmark()
+    # s3_bench.time_sizes()
+    redis_bench = RedisBenchmark()
+    redis_bench.time_sizes()
