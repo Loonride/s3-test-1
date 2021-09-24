@@ -89,6 +89,7 @@ class S3Benchmark(Benchmark):
         obj = self.s3.Object('kir-test-bucket-1', task_id)
         b = generate_bytes(self.task_size_bytes)
         put_t = timeit.timeit(lambda: obj.put(Body=b), number=1)
+        del b
         get_t = timeit.timeit(lambda: obj.get()['Body'].read(), number=1)
         delete_t = timeit.timeit(lambda: obj.delete(), number=1)
         return (put_t, get_t, delete_t)
@@ -106,6 +107,7 @@ class RedisBenchmark(Benchmark):
         task_id = str(uuid.uuid4())
         b = generate_bytes(self.task_size_bytes)
         put_t = timeit.timeit(lambda: self.rc.set(task_id, b), number=1)
+        del b
         get_t = timeit.timeit(lambda: self.rc.get(task_id), number=1)
         delete_t = timeit.timeit(lambda: self.rc.delete(task_id), number=1)
         return (put_t, get_t, delete_t)
