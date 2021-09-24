@@ -25,7 +25,7 @@ python plot.py
 
 # Results
 
-![alt text](https://raw.githubusercontent.com/Loonride/s3-test-1/main/figure.png)
+![alt text](https://raw.githubusercontent.com/Loonride/s3-test-1/main/figure1.png)
 
 ```
 Redis 1000 Bytes Means: PUT 0.001s, GET 0.001s, DELETE 0.001s
