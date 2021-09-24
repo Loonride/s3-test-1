@@ -1,7 +1,7 @@
 # How to run benchmark
 
-Create Amazon S3 Bucket and EC2 instance with access to it via IAM
-Create ElasiCache Redis Instance
+- Create Amazon S3 Bucket and EC2 instance with access to it via IAM
+- Create ElasiCache Redis Instance
 
 ## To Start on Ubuntu 20.04 EC2
 
@@ -28,6 +28,7 @@ python plot.py
 - Using Redis cache.t3.medium, EC2 t2.small
 - 100 runs each
 - Redis/S3 always emptied before each PUT-GET-DELETE sequence
+- Single Redis connection used, boto3 makes new API calls for each request
 
 ![alt text](https://raw.githubusercontent.com/Loonride/s3-test-1/main/figures/figure1.png)
 
