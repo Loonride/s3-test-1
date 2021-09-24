@@ -20,8 +20,8 @@ def generate_bytes(n):
 
 class Benchmark(ABC):
     def __init__(self):
-        self.n_tasks = 10
-        self.byte_test_sizes = [1000, 10000, 100000, 1000000, 10000000] # , 100000000
+        self.n_tasks = 1000
+        self.byte_test_sizes = [1000, 10000, 100000, 1000000, 10000000, 100000000]
         self.task_size_bytes = None
         self.data_filename = 'data.json'
         self.name = 'data'
@@ -128,7 +128,8 @@ class RedisBenchmark(Benchmark):
 
 
 if __name__ == '__main__':
-    s3_bench = S3Benchmark()
-    s3_bench.time_sizes()
     redis_bench = RedisBenchmark()
     redis_bench.time_sizes()
+
+    s3_bench = S3Benchmark()
+    s3_bench.time_sizes()
