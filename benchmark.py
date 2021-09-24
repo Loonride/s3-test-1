@@ -58,15 +58,29 @@ class Benchmark(ABC):
 
     def time_sizes(self):
         sizes = self.byte_test_sizes
-        put_group = {}
-        get_group = {}
-        delete_group = {}
+        put_group = {
+            "data": [],
+            "labels": []
+        }
+        get_group = {
+            "data": [],
+            "labels": []
+        }
+        delete_group = {
+            "data": [],
+            "labels": []
+        }
         for size in sizes:
             (put_ts, get_ts, delete_ts) = self.time_size(size)
-            key = str(size)
-            put_group[key] = put_ts
-            get_group[key] = get_ts
-            delete_group[key] = delete_ts
+            label = str(size)
+
+            put_group["data"].append(put_ts)
+            get_group["data"].append(get_ts)
+            delete_group["data"].append(delete_ts)
+
+            put_group["labels"].append(label)
+            get_group["labels"].append(label)
+            delete_group["labels"].append(label)
 
         final_output = {
             "put": put_group,
