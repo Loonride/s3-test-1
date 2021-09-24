@@ -23,13 +23,23 @@ python3 benchmark.py
 python plot.py
 ```
 
-# Stats
+# Results
+
+![alt text](https://raw.githubusercontent.com/Loonride/s3-test-1/main/figure.png)
 
 ```
-Total put time: 38.172523975372314
-Time per task: 0.03817252397537232
-Total get and delete time: 50.64864802360535
-Time per task: 0.050648648023605344
+Redis 1000 Bytes Means: PUT 0.001s, GET 0.001s, DELETE 0.001s
+Redis 10000 Bytes Means: PUT 0.001s, GET 0.001s, DELETE 0.001s
+Redis 100000 Bytes Means: PUT 0.001s, GET 0.001s, DELETE 0.001s
+Redis 1000000 Bytes Means: PUT 0.012s, GET 0.009s, DELETE 0.001s
+Redis 10000000 Bytes Means: PUT 0.088s, GET 0.092s, DELETE 0.001s
+Redis 100000000 Bytes Means: PUT 0.989s, GET 1.057s, DELETE 0.001s
+S3 1000 Bytes Means: PUT 0.047s, GET 0.025s, DELETE 0.029s
+S3 10000 Bytes Means: PUT 0.038s, GET 0.020s, DELETE 0.022s
+S3 100000 Bytes Means: PUT 0.063s, GET 0.026s, DELETE 0.024s
+S3 1000000 Bytes Means: PUT 0.096s, GET 0.040s, DELETE 0.023s
+S3 10000000 Bytes Means: PUT 0.288s, GET 0.253s, DELETE 0.024s
+S3 100000000 Bytes Means: PUT 1.645s, GET 1.810s, DELETE 0.025s
 ```
 
 # Extra Notes

@@ -18,7 +18,7 @@ data_files = [
 
 fig, axs = plt.subplots(2, 3)
 
-fig.suptitle("Time for PUT/GET/DELETE in seconds (Sizes in 1000 Bytes)")
+fig.suptitle("Time for PUT/GET/DELETE in seconds, Sizes in 1000 Bytes, 100 runs each")
 
 axs = np.ndarray.flatten(axs)
 
