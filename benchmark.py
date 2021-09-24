@@ -100,6 +100,7 @@ class RedisBenchmark(Benchmark):
         self.data_filename = 'redis_data.json'
         self.name = 'Redis'
         self.rc = redis.Redis(redis_host, port=6379, db=0)
+        self.rc.flushdb()
 
     def run_once(self):
         task_id = str(uuid.uuid4())
