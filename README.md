@@ -29,6 +29,7 @@ python plot.py
 - 100 runs each
 - Redis/S3 always emptied before each PUT-GET-DELETE sequence
 - Single Redis connection used, boto3 makes new API calls for each request
+- Uses random bytes of a fixed length
 
 ![alt text](https://raw.githubusercontent.com/Loonride/s3-test-1/main/figures/figure1.png)
 
