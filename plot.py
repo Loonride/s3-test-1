@@ -16,10 +16,11 @@ data_files = [
     }
 ]
 
-figs, axs = plt.subplots(2, 3)
+fig, axs = plt.subplots(2, 3)
+
+fig.suptitle("Time for PUT/GET/DELETE in seconds (Sizes in 1000 Bytes)")
 
 axs = np.ndarray.flatten(axs)
-print(axs)
 
 i = 0
 for data_file_info in data_files:
@@ -32,6 +33,7 @@ for data_file_info in data_files:
         i += 1
         pts = data[key]["data"]
         labels = data[key]["labels"]
+        labels = list(map(lambda l: l[:-3], labels))
         ax.set_title(f"{title}, {key.upper()}")
         ax.boxplot(pts, labels=labels)
 
