@@ -48,6 +48,21 @@ S3 10000000 Bytes Means: PUT 0.288s, GET 0.253s, DELETE 0.024s
 S3 100000000 Bytes Means: PUT 1.645s, GET 1.810s, DELETE 0.025s
 ```
 
+# Results on External Endpoint (Kir's Laptop)
+
+**Important: these results are much more susceptible to network latency since the laptop communicating with S3 is outside of the AWS internal network, as any other FuncX endpoint would be**
+
+![alt text](https://raw.githubusercontent.com/Loonride/s3-test-1/main/figures/figure2.png)
+
+```
+S3 1000 Bytes Means: PUT 0.115s, GET 0.053s, DELETE 0.057s
+S3 10000 Bytes Means: PUT 0.105s, GET 0.055s, DELETE 0.056s
+S3 100000 Bytes Means: PUT 0.134s, GET 0.062s, DELETE 0.059s
+S3 1000000 Bytes Means: PUT 0.493s, GET 0.105s, DELETE 0.060s
+S3 10000000 Bytes Means: PUT 3.655s, GET 0.462s, DELETE 0.056s
+S3 100000000 Bytes Means: PUT 36.265s, GET 3.626s, DELETE 0.058s
+```
+
 # Extra Notes
 
 Make whisker plots to check extreme cases
