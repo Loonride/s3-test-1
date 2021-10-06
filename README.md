@@ -109,9 +109,9 @@ Redis has massive costs compared to S3 and is less scalable, so we should only b
 
 - Tasks <1MB should be placed in Redis, and all others should go straight to S3
 - Users should be able to indicate in a task submission that they want a task to go directly to S3 (but they cannot request going to Redis)
-- A service can be created that is designated to moving tasks that are >1 hour old from Redis to S3 (Is there a way in Redis to trigger an action on expiration?)
+- A service can be created that is designated to moving tasks that are >1 hour old from Redis to S3 (Is there a way in Redis to trigger an action on eviction?)
 - When a the web service or WebSocket service queries a task, it will first check Redis, and if it is a cache miss it will go to S3 (We need to make S3 directly queryable by the user so that we don't have to copy from S3 then send within our services)
-- Much longer sitting period is allowed in S3 (e.g. 1 month)
+- Much longer sitting period is allowed in S3 (e.g. 1 month before eviction)
 
 # Extra Notes
 
