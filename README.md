@@ -107,10 +107,18 @@ Redis has massive costs compared to S3 and is less scalable, so we should only b
 
 # Storage/Caching Rules Proposal
 
-- Tasks <1MB should be placed in Redis, and all others should go straight to S3
-- Users should be able to indicate in a task submission that they want a task to go directly to S3 (but they cannot request going to Redis)
-- A service can be created that is designated to moving tasks that are >1 hour old from Redis to S3 (Is there a way in Redis to trigger an action on eviction?)
-- When a the web service or WebSocket service queries a task, it will first check Redis, and if it is a cache miss it will go to S3 (We need to make S3 directly queryable by the user so that we don't have to copy from S3 then send within our services)
+- Tasks <100KB should be placed in Redis, and all others should go straight to S3
+- If Redis is almost full, tasks should go straight to S3
+- One parameter might be that a user can only have x tasks sitting in Redis before their tasks are forced to go into S3
+- User types and options
+    - General users will have this scheme with strict limits on their usage of Redis
+    - high-performance paying users might be allowed less strict Redis usage (although we would not be able to guarantee this unless parameters are tuned perfectly to prevent Redis overflow)
+    - users could opt for S3-only if their workload is not performance-critical (The incentive for this would be longer time in S3 before eviction)
+- When the web service or WebSocket service queries a task, it will first check Redis, and if it is a cache miss it will go to S3
+- We should make S3 directly queryable by the user so that we don't have to copy from S3 then send from our services 
+    - The only drawback here is requiring the boto3 client as part of the SDK
+    - This also requires ensuring the task is deleted after the user queries it via SDK, I imagine S3 has some kind of read-once permission to force this so that the user cannot repeatedly query it
+- Somewhat long eviction period for Redis assuming we tune parameters correctly (e.g. 1 week)
 - Much longer sitting period is allowed in S3 (e.g. 1 month before eviction)
 
 # Extra Notes
